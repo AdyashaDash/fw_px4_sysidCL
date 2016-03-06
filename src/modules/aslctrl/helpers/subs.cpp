@@ -355,6 +355,17 @@ int subscriptions::update_aslctrl_params(void)
 	handle = param_find("SAFE_IThrotWarn");
 	param_get(handle, &(aslctrl_params.IThrotWarn));
 
+	//CL SYS ID
+	//SYSID
+	handle = param_find("CLSYSID_step");
+	param_get(handle, &(aslctrl_params.CLSYSID_step));
+	handle = param_find("CLSYSID_maneuver");
+	param_get(handle, &(aslctrl_params.CLSYSID_maneuver));
+	handle = param_find("CLSYSID_ctrlinput");
+	param_get(handle, &(aslctrl_params.CLSYSID_ctrlinput));
+	handle = param_find("CLSYSID_repeat");
+	param_get(handle, &(aslctrl_params.CLSYSID_repeat));
+
 	return 0;
 }
 
