@@ -159,3 +159,8 @@ PARAM_DEFINE_FLOAT(FW_T_ThrILim, 0.00f);	//Added
 // SYSTEM INTEGRITY CHECKS
 PARAM_DEFINE_FLOAT(SAFE_IThrotWarn, 0.0f);	// Motor failure warning based on an expected motor current. Default is warning off (param = 0.0)
 
+//CL SYS ID
+PARAM_DEFINE_FLOAT(CLSYSID_step, 0.0f);
+PARAM_DEFINE_INT32(CLSYSID_maneuver, 0);
+PARAM_DEFINE_INT32(CLSYSID_ctrlinput, 0);
+PARAM_DEFINE_INT32(CLSYSID_repeat, 3);
