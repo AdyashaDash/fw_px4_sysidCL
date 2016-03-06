@@ -176,6 +176,13 @@ struct aslctrl_parameters_s {
 
 	//System Integrity Checks
 	float IThrotWarn;
+
+	//----CLSYSID--------------
+	float CLSYSID_step; 				// excitation unit step size [-1,1], NOTE: sign implies the direction of the first step in a given maneuver
+	uint8_t CLSYSID_maneuver; 			// maneuver selection: 2-1-1 (0), chirp (1)
+	uint8_t CLSYSID_ctrlinput; 			// actuator selection: pitch (0), roll (1)
+	uint8_t CLSYSID_repeat; 			// number of times to repeat sys id maneuver
+
 };
 
 /**
