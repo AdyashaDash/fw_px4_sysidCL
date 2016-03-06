@@ -21,6 +21,8 @@ enum CtrlType {
 	//MPC Controllers
 	MPC_STD=10,					// MPC controller (Standard)
 	MPC_ROLLMPCONLY=11			// MPC controller on roll, simplified PID on pitch
+	//CL SYS ID Controllers
+	CLSYSID = 20				// Closed loop system ID maneuvers
 };
 
 enum CtrlMode {
@@ -30,6 +32,7 @@ enum CtrlMode {
 	MODE_ALT=3,					// Altitude control with roll controlled as in CAS
 	MODE_HEAD=4,				// Heading Control
 	MODE_AUTO=5,				// Waypoint following (with altitude control)
+	MODE_CLSYSID=6,
 	//...
 	MODE_RCLOSS_MANFAILSAFE=10,			// Control when RC-signal is lost. Different labels exist only
 	MODE_RCLOSS_CASFAILSAFE=11,			// to signify different control-reactions on RC loss, e.g manual
