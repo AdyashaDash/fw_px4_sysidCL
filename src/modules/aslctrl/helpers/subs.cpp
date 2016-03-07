@@ -357,6 +357,8 @@ int subscriptions::update_aslctrl_params(void)
 
 	//CL SYS ID
 	//SYSID
+	handle = param_find("SYSID_tExcite");
+	param_get(handle, &(aslctrl_params.SYSID_tExcite));
 	handle = param_find("CLSYSID_step");
 	param_get(handle, &(aslctrl_params.CLSYSID_step));
 	handle = param_find("CLSYSID_maneuver");
