@@ -178,6 +178,7 @@ struct aslctrl_parameters_s {
 	float IThrotWarn;
 
 	//----CLSYSID--------------
+	float CLSYSID_tExcite; 				// excitation time (sec) corresponding to apprx. mode natural frequency
 	float CLSYSID_step; 				// excitation unit step size eg: 5, -5 etc. (in degrees), NOTE: sign implies the direction of the first step in a given maneuver
 	uint8_t CLSYSID_maneuver; 			// maneuver selection: 2-1-1 (0), chirp (1)
 	uint8_t CLSYSID_ctrlinput; 			// control selection: pitch (0), roll (1)
