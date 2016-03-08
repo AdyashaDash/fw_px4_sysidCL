@@ -369,7 +369,13 @@ int subscriptions::update_aslctrl_params(void)
 	handle = param_find("CLSYSID_ctrlinput");
 	param_get(handle, &(aslctrl_params.CLSYSID_ctrlinput));
 	handle = param_find("CLSYSID_repeat");
-	param_get(handle, &(aslctrl_params.CLSYSID_repeat));
+	param_get(handle, &(aslctrl_params.CLSYSID_repeat));	
+	handle = param_find("CLSYSID_f_start");
+	param_get(handle, &(aslctrl_params.CLSYSID_f_start));	
+	handle = param_find("CLSYSID_f_end");
+	param_get(handle, &(aslctrl_params.CLSYSID_f_end));	
+	handle = param_find("CLSYSID_Fs");
+	param_get(handle, &(aslctrl_params.CLSYSID_Fs));	
 
 	return 0;
 }

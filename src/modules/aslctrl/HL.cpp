@@ -153,6 +153,9 @@ int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChan
 	float CLSYSID_nom_roll				// nominal roll-reference value 
 	uint8_t CLSYSID_maneuver; 			// maneuver selection: 2-1-1 (0), chirp (1)
 	uint8_t CLSYSID_ctrlinput; 			// control selection: pitch (0), roll (1)
+	uint8_t CLSYSID_f_start				// start frequency for chirp
+	uint8_t CLSYSID_f_end				// end frequency for chirp
+	float CLSYSID_Fs 					// sampling rate for chirp
 	uint8_t CLSYSID_repeat; 			// number of times to repeat sys id maneuver
 */
 
@@ -175,7 +178,7 @@ int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChan
 		t_maneuver_mult = 4.0f;
 		break;
 	case 1: // chirp
-		t_maneuver_mult = 20.0f;
+		t_maneuver_mult = 18.0f;
 		break;
 	default: // error
 	RET = 0;
@@ -193,7 +196,6 @@ int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChan
 	if (man_count>=params->CLSYSID_repeat) {
 
 		//Check maneuver count
-		//TODO: info message
 		RET = 0;
 
 	} else {
@@ -217,9 +219,9 @@ int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChan
 			if (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite*18.0f) {
 				id_step = 0.0f;
 			} else {
-				double delta = ((current_time-t_idstart)/1.0E6f) / n_steps;
+				double delta = ((current_time-t_idstart)/1.0E6f) / params->CLSYSID_Fs;
     			double t = CLSYSID_tExcite * delta;
-    			double phase = 2 * PI * t * (f_start + (f_end - f_start) * delta / 2);
+    			double phase = 2 * PI * t * (params->CLSYSID_f_start + (params->CLSYSID_f_end - params->CLSYSID_f_start) * delta / 2);
     			if (phase > 2 * PI) phase -= 2 * PI;
     			id_step = sin(phase);
 			}
@@ -229,7 +231,7 @@ int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChan
 			RET = 0;
 			break;
 		}
-
+	}
 		//Set control input 			// control selection: pitch (0), roll (1)
 		switch (params->CLSYSID_ctrlinput)
 		{
@@ -243,8 +245,6 @@ int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChan
 			RET = 0;
 			break;
 		}
-
-	}
 
 	return RET;
 }
