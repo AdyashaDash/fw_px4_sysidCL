@@ -29,6 +29,9 @@ public:
 	int TECS_AltAirspeedControl(float &PitchAngleRef, float& uThrot, float& AirspeedRef, float &hRef, float const &h, float const h_home, float &hRef_t, bool& bEngageSpoilers, const bool bUseRamp, const bool bUseThermalHighEtaMode, const bool bModeChanged);
 	int TECS_Update50Hz(void);
 
+	//CLSYSID controller
+	int SYSIDControl(float& uThrot, float& uElev, float& uAil, float& uRud, bool bModeChanged);
+
 	//Helper functions
 	int CalcAltitudeRamp(float& hRef_t, const float& hRef, const float& h, const bool& bModeChanged);
 	int CalcThermalModeModifications(const float& h, const float& hRef_t, bool& bEngageSpoilers, bool bUseThermalHighEtaMode);
@@ -47,6 +50,13 @@ private:
 
 	hrt_abstime t_old;
 	math::Matrix<3,3> R_nb;			//TECS attitude rotation matrix
+
+	hrt_abstime t_idstart;			//System ID maneuver start time
+	//float uThrot_trim = 0.0f;		//System ID throttle trim
+	//float uElev_trim = 0.0f;		//System ID elevator trim
+	//float uAil_trim = 0.0f;			//System ID aileron trim
+	//float uRud_trim = 0.0f;			//System ID rudder trim
+	uint8_t man_count = 0;	
 
 	subscriptions *subs; 			//UORB subscriptions from PX4
 	aslctrl_parameters_s *params;	// Pointer to aslctrl parameters in the UORB subscriptions

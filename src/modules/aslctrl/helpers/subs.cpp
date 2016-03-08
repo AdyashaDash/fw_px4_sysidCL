@@ -360,6 +360,10 @@ int subscriptions::update_aslctrl_params(void)
 	param_get(handle, &(aslctrl_params.CLSYSID_tExcite));
 	handle = param_find("CLSYSID_step");
 	param_get(handle, &(aslctrl_params.CLSYSID_step));
+	handle = param_find("CLSYSID_nom_pitch");
+	param_get(handle, &(aslctrl_params.CLSYSID_nom_pitch));
+	handle = param_find("CLSYSID_nom_roll");
+	param_get(handle, &(aslctrl_params.CLSYSID_nom_roll));
 	handle = param_find("CLSYSID_maneuver");
 	param_get(handle, &(aslctrl_params.CLSYSID_maneuver));
 	handle = param_find("CLSYSID_ctrlinput");
