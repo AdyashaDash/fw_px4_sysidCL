@@ -172,7 +172,7 @@ void ASLAutopilot::update()
 				bModeChanged = true;
 			}
 
-			RET = HLcontrol.CLSYSIDControl(bModeChanged);
+			RET = HLcontrol.CLSYSIDControl(ctrldata->PitchAngleRef, ctrldata->RollAngleRef, bModeChanged);
 
 			if (RET) {
 				//Set actuators

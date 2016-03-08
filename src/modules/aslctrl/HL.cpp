@@ -140,7 +140,7 @@ int HL::WaypointControl_L1(float &RollAngleRef)
 	return 0;
 }
 
-int HL::CLSYSIDControl(bool bModeChanged)
+int HL::CLSYSIDControl(float &PitchAngleRef, float &RollAngleRef, bool bModeChanged)
 {
 	int RET = 1;
 	uint64_t current_time = hrt_absolute_time();
@@ -215,7 +215,6 @@ int HL::CLSYSIDControl(bool bModeChanged)
 			}
 			break;
 		default: // error
-			//TODO: error message
 			id_step = 0.0f;
 			RET = 0;
 			break;
@@ -231,7 +230,6 @@ int HL::CLSYSIDControl(bool bModeChanged)
 			RollAngleRef = params->CLSYSID_nom_roll + id_step;
 			break;
 		default: // error
-			//TODO: error message
 			RET = 0;
 			break;
 		}
