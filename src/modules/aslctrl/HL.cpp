@@ -140,7 +140,7 @@ int HL::WaypointControl_L1(float &RollAngleRef)
 	return 0;
 }
 
-int HL::CLSYSIDControl(float &PitchAngleRef, float &RollAngleRef, bool bModeChanged)
+int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChanged)
 {
 	int RET = 1;
 	uint64_t current_time = hrt_absolute_time();
@@ -174,11 +174,10 @@ int HL::CLSYSIDControl(float &PitchAngleRef, float &RollAngleRef, bool bModeChan
 	case 0: // 2-1-1
 		t_maneuver_mult = 4.0f;
 		break;
-	//case 1: // doublet
-	//	t_maneuver_mult = 2.0f;
-	//	break;
+	case 1: // chirp
+		t_maneuver_mult = 20.0f;
+		break;
 	default: // error
-		//TODO: error message
 	RET = 0;
 		break;
 	}
@@ -214,6 +213,17 @@ int HL::CLSYSIDControl(float &PitchAngleRef, float &RollAngleRef, bool bModeChan
 				id_step = params->CLSYSID_step;
 			}
 			break;
+		case 1:// chirp
+			if (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite*18.0f) {
+				id_step = 0.0f;
+			} else {
+				double delta = ((current_time-t_idstart)/1.0E6f) / n_steps;
+    			double t = CLSYSID_tExcite * delta;
+    			double phase = 2 * PI * t * (f_start + (f_end - f_start) * delta / 2);
+    			if (phase > 2 * PI) phase -= 2 * PI;
+    			id_step = sin(phase);
+			}
+			break;	
 		default: // error
 			id_step = 0.0f;
 			RET = 0;
