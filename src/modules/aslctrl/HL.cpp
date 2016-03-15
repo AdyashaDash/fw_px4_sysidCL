@@ -5,7 +5,7 @@
  *      Author: philipoe
  */
 
-#include "ASLAutopilot.h"
+
 #include <mavlink/mavlink_log.h>
 #include <fcntl.h>
 #include <stdio.h>
