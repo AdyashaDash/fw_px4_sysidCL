@@ -206,7 +206,7 @@ void ASLAutopilot::update()
 		if (subs.vstatus.main_state == (main_state_t)MODE_CAS && !subs.vstatus.rc_signal_lost) 
 		{
 			//We are exactly in CAS mode, update references
-			float id_switch = subs.manual_sp.aux3; //Check if in CLSYSID Mode
+			double id_switch = subs.manual_sp.aux3; //Check if in CLSYSID Mode
 			if(id_switch > 0.5 || id_switch < -0.5)
 			{
 				bool bModeChanged = false;
