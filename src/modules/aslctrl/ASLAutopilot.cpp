@@ -156,10 +156,32 @@ void ASLAutopilot::update()
 			}
 		}
 		//LOOP 1a, CASE 2: Roll Angle feed-through (only Altitude hold)
-		else if(subs.manual_sp.posctl_switch==manual_control_setpoint_s::SWITCH_POS_OFF) {
+		else if(subs.manual_sp.posctl_switch==manual_control_setpoint_s::SWITCH_POS_OFF && params->ASLC_CtrlType!=CLSYSID) {
 			//Roll angle CAS, altitude AUTO via GCS
 			ctrldata->aslctrl_mode = MODE_ALT;
 			ctrldata->RollAngleRef=-params->SAS_RollPDir*subs.manual_sp.y * params->CAS_RollAngleLim;;	//Scaling to reference angles
+		}
+
+		//LOOP 1a, CASE 3: Closed loop system ID maneuver (lat and long ctrl handled)
+		else if(subs.manual_sp.posctl_switch==manual_control_setpoint_s::SWITCH_POS_OFF && params->ASLC_CtrlType==CLSYSID) {
+
+			bool bModeChanged = false;
+			if (ctrldata->aslctrl_mode!=MODE_CLSYSID) {
+				//Change mode if first time in loop
+				ctrldata->aslctrl_mode = MODE_CLSYSID;
+				bModeChanged = true;
+			}
+
+			RET = HLcontrol.CLSYSIDControl(ctrldata->PitchAngleRef, ctrldata->RollAngleRef, bModeChanged);
+
+			if (RET) {
+				//Set control inputs
+				ctrldata->PitchAngleRef = PitchAngleRef;
+				ctrldata->RollAngleRef = RollAngleRef;
+			} else {
+				//Switch back to AUTO
+				ctrldata->aslctrl_mode = MODE_RCLOSS_AUTOFAILSAFE;
+			}
 		}
 
 		//******************************************************************************************************************

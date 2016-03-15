@@ -355,6 +355,28 @@ int subscriptions::update_aslctrl_params(void)
 	handle = param_find("SAFE_IThrotWarn");
 	param_get(handle, &(aslctrl_params.IThrotWarn));
 
+	//CLSYSID
+	handle = param_find("CLSYSID_tExcite");
+	param_get(handle, &(aslctrl_params.CLSYSID_tExcite));
+	handle = param_find("CLSYSID_step");
+	param_get(handle, &(aslctrl_params.CLSYSID_step));
+	handle = param_find("CLSYSID_nom_pitch");
+	param_get(handle, &(aslctrl_params.CLSYSID_nom_pitch));
+	handle = param_find("CLSYSID_nom_roll");
+	param_get(handle, &(aslctrl_params.CLSYSID_nom_roll));
+	handle = param_find("CLSYSID_maneuver");
+	param_get(handle, &(aslctrl_params.CLSYSID_maneuver));
+	handle = param_find("CLSYSID_ctrlinput");
+	param_get(handle, &(aslctrl_params.CLSYSID_ctrlinput));
+	handle = param_find("CLSYSID_repeat");
+	param_get(handle, &(aslctrl_params.CLSYSID_repeat));	
+	handle = param_find("CLSYSID_f_start");
+	param_get(handle, &(aslctrl_params.CLSYSID_f_start));	
+	handle = param_find("CLSYSID_f_end");
+	param_get(handle, &(aslctrl_params.CLSYSID_f_end));	
+	handle = param_find("CLSYSID_Fs");
+	param_get(handle, &(aslctrl_params.CLSYSID_Fs));	
+
 	return 0;
 }
 

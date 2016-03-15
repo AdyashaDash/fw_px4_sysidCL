@@ -165,7 +165,6 @@ ARCHWARNINGS		 = -Wall \
 			   -Werror=uninitialized \
 			   -Werror=init-self\
 			   -Wno-array-bounds
-
 #   -Werror=float-conversion - works, just needs to be phased in with some effort and needs GCC 4.9+
 #   -Wcast-qual  - generates spurious noreturn attribute warnings, try again later
 #   -Wconversion - would be nice, but too many "risky-but-safe" conversions in the code

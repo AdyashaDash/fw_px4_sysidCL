@@ -10,6 +10,7 @@
 #include "HL.h"
 #include "helpers/helpfuncs.h"
 #include "helpers/consts.h"
+#include "CAS.h"
 
 
 HL::HL() : LP_Airspeed(0,0),MA_Airspeed(4,0.0f),LP_vZ(0,0),LP_h(0,0)
@@ -137,6 +138,115 @@ int HL::WaypointControl_L1(float &RollAngleRef)
 	if(params->ASLC_DEBUG==10) printf("Roll Angle Ref(unlim):%7.4f \n",(double)L1Ctrl.nav_roll());
 
 	return 0;
+}
+
+int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChanged)
+{
+	int RET = 1;
+	uint64_t current_time = hrt_absolute_time();
+/*
+	For reference (parameters):
+	--------------
+	float CLSYSID_tExcite; 				// excitation time (sec) corresponding to apprx. mode natural frequency
+	float CLSYSID_step; 				// excitation unit step size eg: 5, -5 etc. (in degrees), NOTE: sign implies the direction of the first step in a given maneuver
+	float CLSYSID_nom_pitch				// nominal pitch-reference value
+	float CLSYSID_nom_roll				// nominal roll-reference value 
+	uint8_t CLSYSID_maneuver; 			// maneuver selection: 2-1-1 (0), chirp (1)
+	uint8_t CLSYSID_ctrlinput; 			// control selection: pitch (0), roll (1)
+	uint8_t CLSYSID_f_start				// start frequency for chirp
+	uint8_t CLSYSID_f_end				// end frequency for chirp
+	float CLSYSID_Fs 					// sampling rate for chirp
+	uint8_t CLSYSID_repeat; 			// number of times to repeat sys id maneuver
+*/
+
+	//If first time in loop
+	if (bModeChanged) {
+
+		//Set ID start time
+		t_idstart = current_time;
+
+		//Freeze angle settings
+		PitchAngleRef = params->CLSYSID_nom_pitch
+		RollAngleRef = params->CLSYSID_nom_roll
+	}
+
+	//ID time required
+	float t_maneuver_mult = 0.0f;
+	switch (params->CLSYSID_maneuver)
+	{
+	case 0: // 2-1-1
+		t_maneuver_mult = 4.0f;
+		break;
+	case 1: // chirp
+		t_maneuver_mult = 18.0f;
+		break;
+	default: // error
+	RET = 0;
+		break;
+	}
+
+	float t_req = params->CLSYSID_tExcite*(t_maneuver_mult+8.0f);
+
+	//Check if time elapsed is over sys. id. requirement
+	if (float(current_time-t_idstart)/1.0E6f>t_req) {
+		man_count = man_count+1;
+		t_idstart = current_time;
+	}
+
+	if (man_count>=params->CLSYSID_repeat) {
+
+		//Check maneuver count
+		RET = 0;
+
+	} else {
+
+		//cl sys id maneuver control
+		float id_step = 0.0f;
+		switch(params->CLSYSID_maneuver)
+		{
+		case 0: // 2-1-1
+			if (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite*4.0f) {
+				id_step = 0.0f;
+			} else if (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite*3.0f) {
+				id_step = params->CLSYSID_step;
+			} else if (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite*2.0f) {
+				id_step = -params->CLSYSID_step;
+			} else {
+				id_step = params->CLSYSID_step;
+			}
+			break;
+		case 1:// chirp
+			if (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite*18.0f) {
+				id_step = 0.0f;
+			} else {
+				double delta = ((current_time-t_idstart)/1.0E6f) / params->CLSYSID_Fs;
+    			double t = CLSYSID_tExcite * delta;
+    			double phase = 2 * PI * t * (params->CLSYSID_f_start + (params->CLSYSID_f_end - params->CLSYSID_f_start) * delta / 2);
+    			if (phase > 2 * PI) phase -= 2 * PI;
+    			id_step = sin(phase);
+			}
+			break;	
+		default: // error
+			id_step = 0.0f;
+			RET = 0;
+			break;
+		}
+	}
+		//Set control input 			// control selection: pitch (0), roll (1)
+		switch (params->CLSYSID_ctrlinput)
+		{
+		case 0: // pitch
+			PitchAngleRef = params->CLSYSID_nom_pitch + id_step;
+			break;
+		case 1: // roll
+			RollAngleRef = params->CLSYSID_nom_roll + id_step;
+			break;
+		default: // error
+			RET = 0;
+			break;
+		}
+
+	return RET;
 }
 
 int HL::TECS_AltAirspeedControl(float &PitchAngleRef, float& uThrot, float& AirspeedRef, float &hRef, float const &h, float const h_home, float &hRef_t, bool& bEngageSpoilers, const bool bUseRamp, const bool bUseThermalHighEtaMode, const bool bModeChanged)
