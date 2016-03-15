@@ -5,6 +5,8 @@
  *      Author: philipoe
  */
 
+#include "helpers/consts.h"
+#include <mathlib/mathlib.h>
 #include "helpers/subs.h"
 #include "helpers/Filters.h"
 #include "helpers/PI.h"
