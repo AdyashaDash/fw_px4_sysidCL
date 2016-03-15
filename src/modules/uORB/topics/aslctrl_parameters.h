@@ -180,11 +180,11 @@ struct aslctrl_parameters_s {
 	//----CLSYSID--------------
 	float CLSYSID_tExcite; 				// excitation time (sec) corresponding to apprx. mode natural frequency
 	float CLSYSID_step; 				// excitation unit step size eg: 5, -5 etc. (in degrees), NOTE: sign implies the direction of the first step in a given maneuver
-	float CLSYSID_nom_pitch				// nominal pitch-reference value
-	float CLSYSID_nom_roll				// nominal roll-reference value
-	uint8_t CLSYSID_f_start				// start frequency for chirp
-	uint8_t CLSYSID_f_end				// end frequency for chirp
-	float CLSYSID_Fs 					// sampling rate for chirp
+	float CLSYSID_nom_pitch;				// nominal pitch-reference value
+	float CLSYSID_nom_roll;				// nominal roll-reference value
+	uint8_t CLSYSID_f_start;				// start frequency for chirp
+	uint8_t CLSYSID_f_end;				// end frequency for chirp
+	float CLSYSID_Fs; 					// sampling rate for chirp
 	uint8_t CLSYSID_maneuver; 			// maneuver selection: 2-1-1 (0), chirp (1)
 	uint8_t CLSYSID_ctrlinput; 			// control selection: pitch (0), roll (1)
 	uint8_t CLSYSID_repeat; 			// number of times to repeat sys id maneuver
