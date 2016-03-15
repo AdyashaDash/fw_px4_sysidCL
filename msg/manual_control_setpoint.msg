@@ -32,7 +32,7 @@ float32 r			 # yaw stick/twist positon, -1..1
 float32 flaps			 # flap position
 float32 aux1			 # default function: camera yaw / azimuth
 float32 aux2			 # default function: camera pitch / tilt
-float32 aux3			 # default function: camera trigger
+float32 aux3			 # current function: closed loop system ID
 float32 aux4			 # default function: camera roll
 float32 aux5			 # default function: payload drop
 
