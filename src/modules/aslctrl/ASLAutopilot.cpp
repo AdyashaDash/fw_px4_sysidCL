@@ -204,10 +204,12 @@ void ASLAutopilot::update()
 		//if((counter %20==0) && (params->ASLC_DEBUG==2)) printf("dt_cas:%8.6f\n", double(hrt_absolute_time()-t2_old)/1.0e6f);
 		//t2_old=hrt_absolute_time();
 
-		if (subs.vstatus.main_state == (main_state_t)MODE_CAS && !subs.vstatus.rc_signal_lost) {
+		if (subs.vstatus.main_state == (main_state_t)MODE_CAS && !subs.vstatus.rc_signal_lost) 
+		{
 			//We are exactly in CAS mode, update references
 			float id_switch = subs.manual_sp.aux3; //Check if in CLSYSID Mode
-			if(id_switch > 0.5 || id_switch < -0.5){
+			if(id_switch > 0.5 || id_switch < -0.5)
+			{
 				bool bModeChanged = false;
 				if (ctrldata->aslctrl_mode != MODE_CLSYSID) {
 					//Change mode if first time in loop

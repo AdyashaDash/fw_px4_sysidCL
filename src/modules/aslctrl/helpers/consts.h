@@ -20,7 +20,7 @@ enum CtrlType {
 	PID_GAINSDECOUPLED=1,		// PID controller, decoupled SAS&CAS gains
 	//MPC Controllers
 	MPC_STD=10,					// MPC controller (Standard)
-	MPC_ROLLMPCONLY=11			// MPC controller on roll, simplified PID on pitch
+	MPC_ROLLMPCONLY=11,			// MPC controller on roll, simplified PID on pitch
 	//CL SYS ID Controllers
 	CLSYSID = 20				// Closed loop system ID maneuvers
 };
