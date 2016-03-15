@@ -166,8 +166,8 @@ int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChan
 		t_idstart = current_time;
 
 		//Freeze angle settings
-		PitchAngleRef = params->CLSYSID_nom_pitch
-		RollAngleRef = params->CLSYSID_nom_roll
+		ctrldata->PitchAngleRef = params->CLSYSID_nom_pitch
+		ctrldata->RollAngleRef = params->CLSYSID_nom_roll
 	}
 
 	//ID time required
@@ -185,7 +185,7 @@ int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChan
 		break;
 	}
 
-	float t_req = params->CLSYSID_tExcite*(t_maneuver_mult+8.0f);
+	float t_req = params->CLSYSID_tExcite*(t_maneuver_mult+6.0f);
 
 	//Check if time elapsed is over sys. id. requirement
 	if (float(current_time-t_idstart)/1.0E6f>t_req) {
@@ -236,10 +236,10 @@ int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChan
 		switch (params->CLSYSID_ctrlinput)
 		{
 		case 0: // pitch
-			PitchAngleRef = params->CLSYSID_nom_pitch + id_step;
+			ctrldata->PitchAngleRef = params->CLSYSID_nom_pitch + id_step;
 			break;
 		case 1: // roll
-			RollAngleRef = params->CLSYSID_nom_roll + id_step;
+			ctrldata->RollAngleRef = params->CLSYSID_nom_roll + id_step;
 			break;
 		default: // error
 			RET = 0;

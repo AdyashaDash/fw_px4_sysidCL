@@ -156,29 +156,11 @@ void ASLAutopilot::update()
 			}
 		}
 		//LOOP 1a, CASE 2: Roll Angle feed-through (only Altitude hold)
-		else if(subs.manual_sp.posctl_switch==manual_control_setpoint_s::SWITCH_POS_OFF && params->ASLC_CtrlType!=CLSYSID) {
+		else if(subs.manual_sp.posctl_switch==manual_control_setpoint_s::SWITCH_POS_OFF) {
 			//Roll angle CAS, altitude AUTO via GCS
 			ctrldata->aslctrl_mode = MODE_ALT;
 			ctrldata->RollAngleRef=-params->SAS_RollPDir*subs.manual_sp.y * params->CAS_RollAngleLim;;	//Scaling to reference angles
-		}
-
-		//LOOP 1a, CASE 3: Closed loop system ID maneuver (lat and long ctrl handled)
-		else if(subs.manual_sp.posctl_switch==manual_control_setpoint_s::SWITCH_POS_OFF && params->ASLC_CtrlType==CLSYSID) {
-
-			bool bModeChanged = false;
-			if (ctrldata->aslctrl_mode!=MODE_CLSYSID) {
-				//Change mode if first time in loop
-				ctrldata->aslctrl_mode = MODE_CLSYSID;
-				bModeChanged = true;
-			}
-
-			RET = HLcontrol.CLSYSIDControl(ctrldata->PitchAngleRef, ctrldata->RollAngleRef, bModeChanged);
-
-			if (RET) {
-				//Set control inputs
-				ctrldata->PitchAngleRef = PitchAngleRef;
-				ctrldata->RollAngleRef = RollAngleRef;
-			} else {
+		} else {
 				//Switch back to AUTO
 				ctrldata->aslctrl_mode = MODE_RCLOSS_AUTOFAILSAFE;
 			}
@@ -222,11 +204,27 @@ void ASLAutopilot::update()
 		//if((counter %20==0) && (params->ASLC_DEBUG==2)) printf("dt_cas:%8.6f\n", double(hrt_absolute_time()-t2_old)/1.0e6f);
 		//t2_old=hrt_absolute_time();
 
-		if(subs.vstatus.main_state == (main_state_t)MODE_CAS && !subs.vstatus.rc_signal_lost) {
+		if (subs.vstatus.main_state == (main_state_t)MODE_CAS && !subs.vstatus.rc_signal_lost) {
 			//We are exactly in CAS mode, update references
+			float id_switch = subs.manual_sp.aux3; //Check if in CLSYSID Mode
+			if(id_switch > 0.5 || id_switch < -0.5){
+				bool bModeChanged = false;
+				if (ctrldata->aslctrl_mode != MODE_CLSYSID) {
+					//Change mode if first time in loop
+					ctrldata->aslctrl_mode = MODE_CLSYSID;
+					bModeChanged = true;
+				}
+				RET = HLcontrol.CLSYSIDControl(ctrldata->PitchAngleRef, ctrldata->RollAngleRef, bModeChanged);
+				if(!RET){
+				ctrldata->aslctrl_mode = MODE_CAS;
+				ctrldata->RollAngleRef = -params->SAS_RollPDir*subs.manual_sp.y * params->CAS_RollAngleLim; //Inputs scaled to reference angles
+				ctrldata->PitchAngleRef = params->SAS_PitchPDir*subs.manual_sp.x * params->CAS_PitchAngleLim; //Inputs scaled to reference angles
+				}
+			} else {
 			ctrldata->aslctrl_mode = MODE_CAS;
 			ctrldata->RollAngleRef = -params->SAS_RollPDir*subs.manual_sp.y * params->CAS_RollAngleLim; //Inputs scaled to reference angles
 			ctrldata->PitchAngleRef = params->SAS_PitchPDir*subs.manual_sp.x * params->CAS_PitchAngleLim; //Inputs scaled to reference angles
+			}
 		}
 
 		// Perform Pitch&Roll Angle control function. This includes gain scheduling & stall protection.
@@ -245,6 +243,7 @@ void ASLAutopilot::update()
 		}
 
 	}
+
 
 	//******************************************************************************************************************
 	//*** LOOP 3: SAS (RATE CONTROL / STABILIZATION)
