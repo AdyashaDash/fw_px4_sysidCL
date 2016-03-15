@@ -163,7 +163,6 @@ void ASLAutopilot::update()
 		} else {
 				//Switch back to AUTO
 				ctrldata->aslctrl_mode = MODE_RCLOSS_AUTOFAILSAFE;
-			}
 		}
 
 		//******************************************************************************************************************
