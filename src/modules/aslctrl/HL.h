@@ -30,7 +30,7 @@ public:
 	int TECS_Update50Hz(void);
 
 	//CLSYSID controller
-	int SYSIDControl(float& uThrot, float& uElev, float& uAil, float& uRud, bool bModeChanged);
+	int CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChanged);
 
 	//Helper functions
 	int CalcAltitudeRamp(float& hRef_t, const float& hRef, const float& h, const bool& bModeChanged);
