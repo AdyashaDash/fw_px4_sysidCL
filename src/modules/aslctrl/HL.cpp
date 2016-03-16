@@ -201,7 +201,7 @@ int HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
 	} else {
 
 		//cl sys id maneuver control
-		float id_step = 0.0f;
+		float id_step;
 		switch(params->CLSYSID_maneuver)
 		{
 		case 0: // 2-1-1
