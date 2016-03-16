@@ -219,9 +219,9 @@ int HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
 			if (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite*18.0f) {
 				id_step = 0.0f;
 			} else {
-				double delta = ((current_time-t_idstart)/1.0E6f) / params->CLSYSID_Fs;
+				float delta = ((current_time-t_idstart)/1.0E6f) / params->CLSYSID_Fs;
     			float t = params->CLSYSID_tExcite * delta;
-    			double phase = 2 * PI * t * (params->CLSYSID_f_start + (params->CLSYSID_f_end - params->CLSYSID_f_start) * delta / 2);
+    			float phase = 2 * PI * t * (params->CLSYSID_f_start + (params->CLSYSID_f_end - params->CLSYSID_f_start) * delta / 2);
     			if (phase > 2 * PI) phase -= 2 * PI;
     			id_step = sin(phase);
 			}
