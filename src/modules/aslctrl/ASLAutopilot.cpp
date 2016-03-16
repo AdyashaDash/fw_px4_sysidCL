@@ -205,11 +205,12 @@ void ASLAutopilot::update()
 		if (subs.vstatus.main_state == (main_state_t)MODE_CAS && !subs.vstatus.rc_signal_lost) 
 		{
 			//We are exactly in CAS mode, update references
+
+			//Closed Loop System ID starts here:
 			double id_switch = subs.manual_sp.aux3; //Check if in CLSYSID Mode
-			if(id_switch > 0.5 || id_switch < -0.5)
-			{
+			if(id_switch > 0.5 || id_switch < -0.5){
 				bool bModeChanged = false;
-				if (ctrldata->aslctrl_mode != MODE_CLSYSID) {
+				if (ctrldata->aslctrl_mode != MODE_CLSYSID){
 					//Change mode if first time in loop
 					ctrldata->aslctrl_mode = MODE_CLSYSID;
 					bModeChanged = true;
