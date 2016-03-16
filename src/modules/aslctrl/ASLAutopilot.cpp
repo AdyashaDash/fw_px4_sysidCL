@@ -209,9 +209,9 @@ void ASLAutopilot::update()
 			if(id_switch > 0.5 || id_switch < -0.5)
 			{
 				bool bModeChanged = false;
-				if (ctrldata->aslctrl_type != CLSYSID) {
+				if (ctrldata->aslctrl_mode != MODE_CLSYSID) {
 					//Change mode if first time in loop
-					ctrldata->aslctrl_type = CLSYSID;
+					ctrldata->aslctrl_mode = MODE_CLSYSID;
 					bModeChanged = true;
 				}
 				float rangleref = params->CLSYSID_nom_roll*DEG2RAD;
