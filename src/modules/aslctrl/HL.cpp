@@ -166,8 +166,8 @@ int HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
 		t_idstart = current_time;
 
 		//Freeze angle settings
-		float pangleref_nom = pangleref;
-		float rangleref_nom = rangleref;
+		pangleref_nom = pangleref;
+		rangleref_nom = rangleref;
 	}
 
 	//ID time required

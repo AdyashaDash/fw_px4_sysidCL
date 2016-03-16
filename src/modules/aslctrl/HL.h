@@ -53,6 +53,8 @@ private:
 	math::Matrix<3,3> R_nb;			//TECS attitude rotation matrix
 
 	hrt_abstime t_idstart;			//System ID maneuver start time
+	float pangleref_nom = 0.0f;
+	float rangleref_nom = 0.0f;
 	uint8_t man_count = 0;	
 
 	subscriptions *subs; 			//UORB subscriptions from PX4
