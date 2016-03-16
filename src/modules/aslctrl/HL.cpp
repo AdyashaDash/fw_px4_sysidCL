@@ -166,8 +166,8 @@ int HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
 		t_idstart = current_time;
 
 		//Freeze angle settings
-		pangleref = params->CLSYSID_nom_pitch
-		rangleref = params->CLSYSID_nom_roll
+		float pangleref_nom = pangleref;
+		float rangleref_nom = rangleref;
 	}
 
 	//ID time required
@@ -236,10 +236,10 @@ int HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
 		switch (params->CLSYSID_ctrlinput)
 		{
 		case 0: // pitch
-			pangleref = params->CLSYSID_nom_pitch + id_step;
+			pangleref = pangleref_nom + id_step;
 			break;
 		case 1: // roll
-			rangleref = params->CLSYSID_nom_roll + id_step;
+			rangleref = rangleref_nom + id_step;
 			break;
 		default: // error
 			RET = 0;

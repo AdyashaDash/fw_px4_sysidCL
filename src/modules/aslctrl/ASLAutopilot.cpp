@@ -4,8 +4,6 @@
 #include "helpers/helpfuncs.h"
 #include "helpers/consts.h"
 #include <mathlib/mathlib.h>
-#include "HL.h"
-
 
 const int RET_OK = 0;
 
@@ -216,6 +214,8 @@ void ASLAutopilot::update()
 					ctrldata->aslctrl_mode = MODE_CLSYSID;
 					bModeChanged = true;
 				}
+				float rangleref = params->CLSYSID_nom_roll;
+				float pangleref = params->CLSYSID_nom_pitch;
 				RET = HLcontrol.CLSYSIDControl(pangleref, rangleref, bModeChanged);
 				if(RET){
 				ctrldata->aslctrl_mode = MODE_CAS;
