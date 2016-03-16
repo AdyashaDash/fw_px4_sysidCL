@@ -5,7 +5,6 @@
  *      Author: philipoe
  */
 
-#include "helpers/consts.h"
 #include <mathlib/mathlib.h>
 #include "helpers/subs.h"
 #include "helpers/Filters.h"
@@ -32,7 +31,7 @@ public:
 	int TECS_Update50Hz(void);
 
 	//CLSYSID controller
-	int CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChanged);
+	int CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged);
 
 	//Helper functions
 	int CalcAltitudeRamp(float& hRef_t, const float& hRef, const float& h, const bool& bModeChanged);
@@ -54,10 +53,8 @@ private:
 	math::Matrix<3,3> R_nb;			//TECS attitude rotation matrix
 
 	hrt_abstime t_idstart;			//System ID maneuver start time
-	//float uThrot_trim = 0.0f;		//System ID throttle trim
-	//float uElev_trim = 0.0f;		//System ID elevator trim
-	//float uAil_trim = 0.0f;			//System ID aileron trim
-	//float uRud_trim = 0.0f;			//System ID rudder trim
+	float pangleref = 0.0f;				//System ID pitch angle reference
+	float rangleref = 0.0f 				//System ID roll angle reference
 	uint8_t man_count = 0;	
 
 	subscriptions *subs; 			//UORB subscriptions from PX4

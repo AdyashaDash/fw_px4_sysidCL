@@ -215,11 +215,11 @@ void ASLAutopilot::update()
 					ctrldata->aslctrl_mode = MODE_CLSYSID;
 					bModeChanged = true;
 				}
-				RET = HLcontrol.CLSYSIDControl(ctrldata->PitchAngleRef, ctrldata->RollAngleRef, bModeChanged);
-				if(!RET){
+				RET = HLcontrol.CLSYSIDControl(pangleref, rangleref, bModeChanged);
+				if(RET){
 				ctrldata->aslctrl_mode = MODE_CAS;
-				ctrldata->RollAngleRef = -params->SAS_RollPDir*subs.manual_sp.y * params->CAS_RollAngleLim; //Inputs scaled to reference angles
-				ctrldata->PitchAngleRef = params->SAS_PitchPDir*subs.manual_sp.x * params->CAS_PitchAngleLim; //Inputs scaled to reference angles
+				ctrldata->RollAngleRef = rangleref;
+				ctrldata->PitchAngleRef = pangleref;
 				}
 			} else {
 			ctrldata->aslctrl_mode = MODE_CAS;

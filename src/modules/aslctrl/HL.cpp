@@ -5,9 +5,6 @@
  *      Author: philipoe
  */
 
-
-#include <mavlink/mavlink_log.h>
-#include <fcntl.h>
 #include <stdio.h>
 #include <mathlib/mathlib.h>
 #include "HL.h"
@@ -143,7 +140,7 @@ int HL::WaypointControl_L1(float &RollAngleRef)
 	return 0;
 }
 
-int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChanged)
+int HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
 {
 	int RET = 1;
 	uint64_t current_time = hrt_absolute_time();
@@ -169,8 +166,8 @@ int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChan
 		t_idstart = current_time;
 
 		//Freeze angle settings
-		ctrldata->PitchAngleRef = params->CLSYSID_nom_pitch
-		ctrldata->RollAngleRef = params->CLSYSID_nom_roll
+		pangleref = params->CLSYSID_nom_pitch
+		rangleref = params->CLSYSID_nom_roll
 	}
 
 	//ID time required
@@ -239,10 +236,10 @@ int HL::CLSYSIDControl(float& PitchAngleRef, float& RollAngleRef, bool bModeChan
 		switch (params->CLSYSID_ctrlinput)
 		{
 		case 0: // pitch
-			ctrldata->PitchAngleRef = params->CLSYSID_nom_pitch + id_step;
+			pangleref = params->CLSYSID_nom_pitch + id_step;
 			break;
 		case 1: // roll
-			ctrldata->RollAngleRef = params->CLSYSID_nom_roll + id_step;
+			rangleref = params->CLSYSID_nom_roll + id_step;
 			break;
 		default: // error
 			RET = 0;
