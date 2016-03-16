@@ -15,6 +15,7 @@
 
 HL::HL() : LP_Airspeed(0,0),MA_Airspeed(4,0.0f),LP_vZ(0,0),LP_h(0,0)
 {
+	ctrldata=&subs.aslctrl_data;
 	bSpoilerAltExceeded=false;
 	bhMinExceeded=false;
 };
@@ -234,24 +235,26 @@ void HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
 			break;
 		}
 	}
-		//Set control input 			// control selection: pitch (0), roll (1)
-		switch (params->CLSYSID_ctrlinput)
-		{
-		case 0: // pitch
-			pangleref = pangleref_nom + id_step;
-			break;
-		case 1: // roll
-			rangleref = rangleref_nom + id_step;
-			break;
-		default: // error
-			RET = 0;
-			break;
-		}
-	if(RET){
-	ctrldata->aslctrl_mode = MODE_CAS;
-	ctrldata->RollAngleRef = rangleref;
-	ctrldata->PitchAngleRef = pangleref;
+	//Set control input 			// control selection: pitch (0), roll (1)
+	switch (params->CLSYSID_ctrlinput)
+	{
+	case 0: // pitch
+		pangleref = pangleref_nom + id_step;
+		break;
+	case 1: // roll
+		rangleref = rangleref_nom + id_step;
+		break;
+	default: // error
+		RET = 0;
+		break;
 	}
+	if(RET){
+			ctrldata->aslctrl_mode = MODE_CAS;
+			ctrldata->RollAngleRef = rangleref;
+			ctrldata->PitchAngleRef = pangleref;
+	}
+
+		//return RET;
 }
 
 int HL::TECS_AltAirspeedControl(float &PitchAngleRef, float& uThrot, float& AirspeedRef, float &hRef, float const &h, float const h_home, float &hRef_t, bool& bEngageSpoilers, const bool bUseRamp, const bool bUseThermalHighEtaMode, const bool bModeChanged)
