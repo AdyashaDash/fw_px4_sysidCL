@@ -31,7 +31,7 @@ public:
 	int TECS_Update50Hz(void);
 
 	//CLSYSID controller
-	int CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged);
+	void CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged);
 
 	//Helper functions
 	int CalcAltitudeRamp(float& hRef_t, const float& hRef, const float& h, const bool& bModeChanged);
