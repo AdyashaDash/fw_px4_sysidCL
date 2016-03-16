@@ -209,19 +209,15 @@ void ASLAutopilot::update()
 			if(id_switch > 0.5 || id_switch < -0.5)
 			{
 				bool bModeChanged = false;
-				if (ctrldata->aslctrl_mode != MODE_CLSYSID) {
+				if (ctrldata->aslctrl_type != CLSYSID) {
 					//Change mode if first time in loop
-					ctrldata->aslctrl_mode = MODE_CLSYSID;
+					ctrldata->aslctrl_type = CLSYSID;
 					bModeChanged = true;
 				}
-				float rangleref = params->CLSYSID_nom_roll;
-				float pangleref = params->CLSYSID_nom_pitch;
-				RET = HLcontrol.CLSYSIDControl(pangleref, rangleref, bModeChanged);
-				if(RET){
-				ctrldata->aslctrl_mode = MODE_CAS;
-				ctrldata->RollAngleRef = rangleref;
-				ctrldata->PitchAngleRef = pangleref;
-				}
+				float rangleref = params->CLSYSID_nom_roll*DEG2RAD;
+				float pangleref = params->CLSYSID_nom_pitch*DEG2RAD;
+				HLcontrol.CLSYSIDControl(pangleref, rangleref, bModeChanged);
+
 			} else {
 			ctrldata->aslctrl_mode = MODE_CAS;
 			ctrldata->RollAngleRef = -params->SAS_RollPDir*subs.manual_sp.y * params->CAS_RollAngleLim; //Inputs scaled to reference angles
