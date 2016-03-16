@@ -54,7 +54,7 @@ private:
 
 	hrt_abstime t_idstart;			//System ID maneuver start time
 	float pangleref = 0.0f;				//System ID pitch angle reference
-	float rangleref = 0.0f 				//System ID roll angle reference
+	float rangleref = 0.0f; 				//System ID roll angle reference
 	uint8_t man_count = 0;	
 
 	subscriptions *subs; 			//UORB subscriptions from PX4
