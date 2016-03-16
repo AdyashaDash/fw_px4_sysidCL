@@ -140,7 +140,7 @@ int HL::WaypointControl_L1(float &RollAngleRef)
 	return 0;
 }
 
-int HL::CLSYSIDControl(float& pangleref, float rangleref&, bool bModeChanged)
+int HL::CLSYSIDControl(float& pangleref, float& rangleref, bool bModeChanged)
 {
 	int RET = 1;
 	uint64_t current_time = hrt_absolute_time();
