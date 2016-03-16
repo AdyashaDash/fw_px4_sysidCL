@@ -15,7 +15,6 @@
 
 HL::HL() : LP_Airspeed(0,0),MA_Airspeed(4,0.0f),LP_vZ(0,0),LP_h(0,0)
 {
-	ctrldata=&subs.aslctrl_data;
 	bSpoilerAltExceeded=false;
 	bhMinExceeded=false;
 };
@@ -141,7 +140,7 @@ int HL::WaypointControl_L1(float &RollAngleRef)
 	return 0;
 }
 
-void HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
+int HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
 {
 	int RET = 1;
 	uint64_t current_time = hrt_absolute_time();
@@ -248,13 +247,8 @@ void HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
 		RET = 0;
 		break;
 	}
-	if(RET){
-			ctrldata->aslctrl_mode = MODE_CAS;
-			ctrldata->RollAngleRef = rangleref;
-			ctrldata->PitchAngleRef = pangleref;
-	}
 
-		//return RET;
+	return RET;
 }
 
 int HL::TECS_AltAirspeedControl(float &PitchAngleRef, float& uThrot, float& AirspeedRef, float &hRef, float const &h, float const h_home, float &hRef_t, bool& bEngageSpoilers, const bool bUseRamp, const bool bUseThermalHighEtaMode, const bool bModeChanged)

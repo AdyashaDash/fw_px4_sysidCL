@@ -216,8 +216,12 @@ void ASLAutopilot::update()
 				}
 				float rangleref = params->CLSYSID_nom_roll*DEG2RAD;
 				float pangleref = params->CLSYSID_nom_pitch*DEG2RAD;
-				HLcontrol.CLSYSIDControl(pangleref, rangleref, bModeChanged);
-
+				RET = HLcontrol.CLSYSIDControl(pangleref, rangleref, bModeChanged);
+				if(RET){
+				ctrldata->aslctrl_mode = MODE_CAS;
+				ctrldata->RollAngleRef = rangleref;
+				ctrldata->PitchAngleRef = pangleref;
+				}
 			} else {
 			ctrldata->aslctrl_mode = MODE_CAS;
 			ctrldata->RollAngleRef = -params->SAS_RollPDir*subs.manual_sp.y * params->CAS_RollAngleLim; //Inputs scaled to reference angles
