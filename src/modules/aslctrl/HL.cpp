@@ -185,6 +185,8 @@ int HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
 		break;
 	}
 
+	float id_step = 0.0f;
+
 	float t_req = params->CLSYSID_tExcite*(t_maneuver_mult+6.0f);
 
 	//Check if time elapsed is over sys. id. requirement
@@ -201,7 +203,7 @@ int HL::CLSYSIDControl(float pangleref, float rangleref, bool bModeChanged)
 	} else {
 
 		//cl sys id maneuver control
-		float id_step;
+		
 		switch(params->CLSYSID_maneuver)
 		{
 		case 0: // 2-1-1
