@@ -215,7 +215,7 @@ int HL::CLSYSIDControl(float& pangleref, float& rangleref, bool bModeChanged)
 				id_step = params->CLSYSID_step;
 			} else if (float(current_time-t_idstart)/1.0E6f>(params->CLSYSID_tExcite*2.0f+params->CLSYSID_settime)) {
 				id_step = -params->CLSYSID_step;
-			} else (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite) {
+			} else {
 				id_step = params->CLSYSID_step;
 			}
 			break;
