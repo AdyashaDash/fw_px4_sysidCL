@@ -208,7 +208,7 @@ void ASLAutopilot::update()
 
 			//Closed Loop System ID starts here:
 			double id_switch = subs.manual_sp.aux3; //Check if in CLSYSID Mode
-			if((id_switch > 0.5 || id_switch < -0.5) && params->ASLC_CtrlType==CLSYSID){
+			if(id_switch > 0.5 || id_switch < -0.5){
 				bool bModeChanged = false;
 				if (!MODE_CLSYSID){
 					//Change mode if first time in loop
@@ -217,16 +217,28 @@ void ASLAutopilot::update()
 				}
 				float rangleref = params->CLSYSID_nom_roll*DEG2RAD;
 				float pangleref = params->CLSYSID_nom_pitch*DEG2RAD;
-				RET = HLcontrol.CLSYSIDControl(pangleref, rangleref, bModeChanged);
-				if(RET){
-				ctrldata->aslctrl_mode = MODE_CAS;
+				float id_step = 0.0f;
+				RET = HLcontrol.CLSYSIDControl(id_step, bModeChanged);
+				if (RET) {
+					switch (params->CLSYSID_ctrlinput)
+					{
+					case 0: // pitch
+						pangleref += id_step;
+						break;
+					case 1: // roll
+						rangleref += id_step;
+						break;
+					default: // error
+						break;
+					}
+				}
 				ctrldata->RollAngleRef = rangleref;
 				ctrldata->PitchAngleRef = pangleref;
-				}
 			} else {
-			ctrldata->aslctrl_mode = MODE_CAS;
-			ctrldata->RollAngleRef = -params->SAS_RollPDir*subs.manual_sp.y * params->CAS_RollAngleLim; //Inputs scaled to reference angles
-			ctrldata->PitchAngleRef = params->SAS_PitchPDir*subs.manual_sp.x * params->CAS_PitchAngleLim; //Inputs scaled to reference angles
+				if (MODE_CLSYSID) MODE_CLSYSID = false;
+				ctrldata->aslctrl_mode = MODE_CAS;
+				ctrldata->RollAngleRef = -params->SAS_RollPDir*subs.manual_sp.y * params->CAS_RollAngleLim; //Inputs scaled to reference angles
+				ctrldata->PitchAngleRef = params->SAS_PitchPDir*subs.manual_sp.x * params->CAS_PitchAngleLim; //Inputs scaled to reference angles
 			}
 		}
 
@@ -309,7 +321,7 @@ void ASLAutopilot::update()
 
 	//ctrldata->aZ=subs.sensors.accelerometer_m_s2[2]-subs.ekf.x_b_a[2];
 	//float aS=sinf(ctrldata->RollAngle)*-ctrldata->aZ + cosf(ctrldata->RollAngle)*(subs.sensors.accelerometer_m_s2[1]-subs.ekf.x_b_a[1]);
-	//if((counter % 20 == 0) && params->ASLC_DEBUG) printf("Yawref:%7.4f° RollRef:%7.4f° aScmd:%7.4f aS:%7.4f\n",ctrldata->YawAngleRef*RAD2DEG,ctrldata->RollAngleRef*RAD2DEG,HLcontrol.nav_lateral_acceleration_demand(),aS);
+	//if((counter % 20 == 0) && params->ASLC_DEBUG) printf("Yawref:%7.4fï¿½ RollRef:%7.4fï¿½ aScmd:%7.4f aS:%7.4f\n",ctrldata->YawAngleRef*RAD2DEG,ctrldata->RollAngleRef*RAD2DEG,HLcontrol.nav_lateral_acceleration_demand(),aS);
 
 	//******************************************************************************************************************
 	//*** UPDATE ACTUATORS

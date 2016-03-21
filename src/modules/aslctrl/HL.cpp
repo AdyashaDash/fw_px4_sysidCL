@@ -140,7 +140,7 @@ int HL::WaypointControl_L1(float &RollAngleRef)
 	return 0;
 }
 
-int HL::CLSYSIDControl(float& pangleref, float& rangleref, bool bModeChanged)
+int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 {
 	int RET = 1;
 	uint64_t current_time = hrt_absolute_time();
@@ -165,9 +165,6 @@ int HL::CLSYSIDControl(float& pangleref, float& rangleref, bool bModeChanged)
 		//Set ID start time
 		t_idstart = current_time;
 
-		//Freeze angle settings
-		pangleref_nom = pangleref;
-		rangleref_nom = rangleref;
 	}
 
 	//ID time required
@@ -186,8 +183,6 @@ int HL::CLSYSIDControl(float& pangleref, float& rangleref, bool bModeChanged)
 	RET = 0;
 		break;
 	}
-
-	float id_step = 0.0f;
 
 	float t_req = params->CLSYSID_tExcite*(t_maneuver_mult+6.0f);
 
@@ -231,23 +226,9 @@ int HL::CLSYSIDControl(float& pangleref, float& rangleref, bool bModeChanged)
 			}
 			break;	
 		default: // error
-			id_step = 0.0f;
 			RET = 0;
 			break;
 		}
-	}
-	//Set control input 			// control selection: pitch (0), roll (1)
-	switch (params->CLSYSID_ctrlinput)
-	{
-	case 0: // pitch
-		pangleref = pangleref_nom + id_step;
-		break;
-	case 1: // roll
-		rangleref = rangleref_nom + id_step;
-		break;
-	default: // error
-		RET = 0;
-		break;
 	}
 
 	return RET;
