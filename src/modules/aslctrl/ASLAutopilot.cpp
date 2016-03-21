@@ -208,11 +208,11 @@ void ASLAutopilot::update()
 
 			//Closed Loop System ID starts here:
 			double id_switch = subs.manual_sp.aux3; //Check if in CLSYSID Mode
-			if(id_switch > 0.5 || id_switch < -0.5){
+			if((id_switch > 0.5 || id_switch < -0.5) && params->ASLC_CtrlType==CLSYSID){
 				bool bModeChanged = false;
-				if (ctrldata->aslctrl_mode != MODE_CLSYSID){
+				if (!MODE_CLSYSID){
 					//Change mode if first time in loop
-					ctrldata->aslctrl_mode = MODE_CLSYSID;
+					MODE_CLSYSID = true;
 					bModeChanged = true;
 				}
 				float rangleref = params->CLSYSID_nom_roll*DEG2RAD;

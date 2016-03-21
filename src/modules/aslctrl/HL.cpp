@@ -176,9 +176,11 @@ int HL::CLSYSIDControl(float& pangleref, float& rangleref, bool bModeChanged)
 	{
 	case 0: // 2-1-1
 		t_maneuver_mult = 4.0f;
+		//params->CLSYSID_settime = 0.0f;
 		break;
 	case 1: // chirp
 		t_maneuver_mult = 18.0f;
+		//params->CLSYSID_settime = 1.0f;
 		break;
 	default: // error
 	RET = 0;
@@ -207,18 +209,18 @@ int HL::CLSYSIDControl(float& pangleref, float& rangleref, bool bModeChanged)
 		switch(params->CLSYSID_maneuver)
 		{
 		case 0: // 2-1-1
-			if (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite*4.0f) {
+			if (float(current_time-t_idstart)/1.0E6f>(params->CLSYSID_tExcite*4.0f+params->CLSYSID_settime)||float(current_time-t_idstart)/1.0E6f<params->CLSYSID_settime) {
 				id_step = 0.0f;
-			} else if (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite*3.0f) {
+			} else if (float(current_time-t_idstart)/1.0E6f>(params->CLSYSID_tExcite*3.0f+params->CLSYSID_settime)) {
 				id_step = params->CLSYSID_step;
-			} else if (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite*2.0f) {
+			} else if (float(current_time-t_idstart)/1.0E6f>(params->CLSYSID_tExcite*2.0f+params->CLSYSID_settime)) {
 				id_step = -params->CLSYSID_step;
-			} else {
+			} else (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite) {
 				id_step = params->CLSYSID_step;
 			}
 			break;
 		case 1:// chirp
-			if (float(current_time-t_idstart)/1.0E6f>params->CLSYSID_tExcite*18.0f) {
+			if (float(current_time-t_idstart)/1.0E6f>(params->CLSYSID_tExcite*18.0f+params->CLSYSID_settime)||float(current_time-t_idstart)/1.0E6f<params->CLSYSID_settime) {
 				id_step = 0.0f;
 			} else {
 				float delta = ((current_time-t_idstart)/1.0E6f) / params->CLSYSID_Fs;

@@ -54,6 +54,7 @@ private:
 	//CAS_MPC CAS_MPC_control;
 	//High Level Control (Waypoint-Following including Loiter, RTL, Velocity Control)
 	HL HLcontrol;
+	bool MODE_CLSYSID = false;
 
 private:
 	//as per standard on PX4IO, correct ordering to spektrum standard is done in mixer.

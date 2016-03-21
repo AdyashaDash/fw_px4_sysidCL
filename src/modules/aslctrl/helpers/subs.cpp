@@ -375,7 +375,9 @@ int subscriptions::update_aslctrl_params(void)
 	handle = param_find("CLSYSID_f_end");
 	param_get(handle, &(aslctrl_params.CLSYSID_f_end));	
 	handle = param_find("CLSYSID_Fs");
-	param_get(handle, &(aslctrl_params.CLSYSID_Fs));	
+	param_get(handle, &(aslctrl_params.CLSYSID_Fs));
+	handle = param_find("CLSYSID_settime");
+	param_get(handle, &(aslctrl_params.CLSYSID_settime));	
 
 	return 0;
 }
