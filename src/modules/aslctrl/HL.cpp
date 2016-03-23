@@ -164,6 +164,7 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 
 		//Set ID start time
 		t_idstart = current_time;
+		man_count = 0;
 
 	}
 
