@@ -215,7 +215,7 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 			}
 			break;
 		case 1:// chirp
-			if (float(current_time-t_idstart)/1.0E6f>(params->CLSYSID_tExcite*18.0f+params->CLSYSID_settime)||float(current_time-t_idstart)/1.0E6f<params->CLSYSID_settime) {
+			if (float(current_time-t_idstart)/1.0E6f>(params->CLSYSID_tExcite+params->CLSYSID_settime)||float(current_time-t_idstart)/1.0E6f<params->CLSYSID_settime) {
 				id_step = 0.0f;
 			} else {
 				float delta = ((current_time-t_idstart)/1.0E6f) / params->CLSYSID_Fs;
