@@ -188,7 +188,7 @@ struct aslctrl_parameters_s {
 	uint8_t CLSYSID_maneuver; 			// maneuver selection: 2-1-1 (0), chirp (1)
 	uint8_t CLSYSID_ctrlinput; 			// control selection: pitch (0), roll (1)
 	uint8_t CLSYSID_repeat; 			// number of times to repeat sys id maneuver
-	uint8_t CLSYSID_settime;				// settling time before maneuver starts
+	uint8_t CLSYSID_settime;			// settling time before maneuver starts
 };
 
 /**
