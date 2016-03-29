@@ -231,9 +231,9 @@ void ASLAutopilot::update()
 					default: // error
 						break;
 					}
-				}
 				ctrldata->RollAngleRef = rangleref;
 				ctrldata->PitchAngleRef = pangleref;
+				}else{bModeChanged = false;}
 			} else {
 				if (MODE_CLSYSID) MODE_CLSYSID = false;
 				ctrldata->aslctrl_mode = MODE_CAS;

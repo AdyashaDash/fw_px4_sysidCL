@@ -168,24 +168,22 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 
 	}
 
+	float t_req = 0.0;
 	//ID time required
-	float t_maneuver_mult = 0.0f;
 	switch (params->CLSYSID_maneuver)
 	{
 	case 0: // 2-1-1
-		t_maneuver_mult = 4.0f;
 		//params->CLSYSID_settime = 0.0f;
+		t_req = params->CLSYSID_tExcite*4.0f + 6.0f;
 		break;
 	case 1: // chirp
-		t_maneuver_mult = 18.0f;
 		//params->CLSYSID_settime = 1.0f;
+		t_req = params->CLSYSID_tExcite + 6.0f;
 		break;
 	default: // error
 	RET = 0;
 		break;
 	}
-
-	float t_req = params->CLSYSID_tExcite*(t_maneuver_mult+6.0f);
 
 	//Check if time elapsed is over sys. id. requirement
 	if (float(current_time-t_idstart)/1.0E6f>t_req) {
@@ -219,11 +217,10 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 			if (float(current_time-t_idstart)/1.0E6f>(params->CLSYSID_tExcite+params->CLSYSID_settime)||float(current_time-t_idstart)/1.0E6f<params->CLSYSID_settime) {
 				id_step = 0.0f;
 			} else {
-				float delta = ((current_time-t_idstart)/1.0E6f) / params->CLSYSID_Fs;
-    			float t = params->CLSYSID_tExcite * delta;
-    			float phase = 2 * PI * t * (params->CLSYSID_f_start + (params->CLSYSID_f_end - params->CLSYSID_f_start) * delta / 2);
-    			if (phase > 2 * PI) phase -= 2 * PI;
+				float k=(params->CLSYSID_f_end-params->CLSYSID_f_start)/params->CLSYSID_tExcite;
+				float phase=2*PI*(params->CLSYSID_f_start+k*0.5f*current_time)*current_time;
     			id_step = sin(phase);
+    			id_step *= params->CLSYSID_step*DEG2RAD;
 			}
 			break;	
 		default: // error
