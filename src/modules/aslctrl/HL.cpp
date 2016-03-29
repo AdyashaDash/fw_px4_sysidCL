@@ -219,7 +219,8 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 			} else {
 				float k=(params->CLSYSID_f_end-params->CLSYSID_f_start)/params->CLSYSID_tExcite;
 				float phase=2*PI*(params->CLSYSID_f_start+k*0.5f*current_time)*current_time;
-    			id_step = params->CLSYSID_step*DEG2RAD*sin(phase);
+    			id_step = sin(phase);
+    			id_step *= params->CLSYSID_step*DEG2RAD;
 			}
 			break;	
 		default: // error
