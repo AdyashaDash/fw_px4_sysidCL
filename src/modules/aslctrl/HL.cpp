@@ -173,12 +173,12 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 	{
 	case 0: // 2-1-1
 		//params->CLSYSID_settime = 0.0f;
-		float t_req = params->CLSYSID_tExcite*4.0f + 6.0f;
-		break;
+		{float t_req = params->CLSYSID_tExcite*4.0f + 6.0f;
+		break;}
 	case 1: // chirp
 		//params->CLSYSID_settime = 1.0f;
-		float t_req = params->CLSYSID_tExcite + 6.0f;
-		break;
+		{float t_req = params->CLSYSID_tExcite + 6.0f;
+		break;}
 	default: // error
 	RET = 0;
 		break;
