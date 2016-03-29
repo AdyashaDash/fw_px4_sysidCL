@@ -231,6 +231,7 @@ void ASLAutopilot::update()
 					default: // error
 						break;
 					}
+				else{bModeChanged = false;}
 				}
 				ctrldata->RollAngleRef = rangleref;
 				ctrldata->PitchAngleRef = pangleref;
