@@ -184,7 +184,7 @@ struct aslctrl_parameters_s {
 	float CLSYSID_nom_roll;				// nominal roll-reference value
 	uint8_t CLSYSID_f_start;			// start frequency for chirp
 	uint8_t CLSYSID_f_end;				// end frequency for chirp
-	//float CLSYSID_Fs; 					// sampling rate for chirp
+	float CLSYSID_Fs; 					// sampling rate for chirp
 	uint8_t CLSYSID_maneuver; 			// maneuver selection: 2-1-1 (0), chirp (1)
 	uint8_t CLSYSID_ctrlinput; 			// control selection: pitch (0), roll (1)
 	uint8_t CLSYSID_repeat; 			// number of times to repeat sys id maneuver

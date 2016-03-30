@@ -143,6 +143,7 @@ int HL::WaypointControl_L1(float &RollAngleRef)
 int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 {
 	int RET = 1;
+	printf("RET = %d inside HL module beginning\n", (int)RET);
 	uint64_t current_time = hrt_absolute_time();
 /*
 	For reference (parameters):
@@ -161,10 +162,10 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 
 	//If first time in loop
 	if (bModeChanged) {
-
 		//Set ID start time
 		t_idstart = current_time;
 		man_count = 0;
+		printf("man_count when bModeChanged is true= %d\n", (int)man_count);
 
 	}
 
@@ -175,26 +176,36 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 	case 0: // 2-1-1
 		//params->CLSYSID_settime = 0.0f;
 		t_req = params->CLSYSID_tExcite*4.0f + 6.0f;
+		printf("value of CLSYSID_maneuver in case %d:%d\n", (int)0, (int)params->CLSYSID_maneuver);
+		printf("value of t_req in case %d:%d\n", (int)0, (int)t_req);
 		break;
 	case 1: // chirp
 		//params->CLSYSID_settime = 1.0f;
 		t_req = params->CLSYSID_tExcite + 6.0f;
+		printf("value of CLSYSID_maneuver in case %d:%d\n", (int)1, (int)params->CLSYSID_maneuver);
+		printf("value of t_req in case %d:%d\n", (int)1, (int)t_req);
 		break;
 	default: // error
-	RET = 0;
+		RET = 0;
+		printf("I am switching to defaut case in t_req switch\n");
 		break;
 	}
+
+	printf("my t_req after the switch case = %d\n", (int)t_req);
 
 	//Check if time elapsed is over sys. id. requirement
 	if (float(current_time-t_idstart)/1.0E6f>t_req) {
 		man_count = man_count+1;
 		t_idstart = current_time;
+		printf("I am repeating man_count already\n");
 	}
 
 	if (man_count>=params->CLSYSID_repeat) {
 
 		//Check maneuver count
 		RET = 0;
+		printf("my man_count is greater than CLSYSID_repeat\n");
+		printf("man_count=%d and CLSYSID_repeat = %d\n", (int)man_count,(int)params->CLSYSID_repeat);
 
 	} else {
 
@@ -207,10 +218,13 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 				id_step = 0.0f;
 			} else if (float(current_time-t_idstart)/1.0E6f>(params->CLSYSID_tExcite*3.0f+params->CLSYSID_settime)) {
 				id_step = params->CLSYSID_step*DEG2RAD;
+				printf("id_step_innerloop %d.%d\n", (int)id_step,(int)((id_step-(int)id_step)*100));
 			} else if (float(current_time-t_idstart)/1.0E6f>(params->CLSYSID_tExcite*2.0f+params->CLSYSID_settime)) {
 				id_step = -params->CLSYSID_step*DEG2RAD;
+				printf("id_step_innerloop %d.%d\n", (int)id_step,(int)((id_step-(int)id_step)*100));
 			} else {
 				id_step = params->CLSYSID_step*DEG2RAD;
+				printf("id_step_innerloop %d.%d\n", (int)id_step,(int)((id_step-(int)id_step)*100));
 			}
 			break;
 		case 1:// chirp
@@ -225,11 +239,13 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 			break;	
 		default: // error
 			RET = 0;
+			printf("I am switching to defaut case in id_step case\n");
 			break;
 		}
 	}
 
 	return RET;
+	printf("the value for RET that HL function returns:%d\n",(int)RET);
 }
 
 int HL::TECS_AltAirspeedControl(float &PitchAngleRef, float& uThrot, float& AirspeedRef, float &hRef, float const &h, float const h_home, float &hRef_t, bool& bEngageSpoilers, const bool bUseRamp, const bool bUseThermalHighEtaMode, const bool bModeChanged)

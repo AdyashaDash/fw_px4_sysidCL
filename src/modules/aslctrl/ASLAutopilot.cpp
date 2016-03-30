@@ -210,15 +210,20 @@ void ASLAutopilot::update()
 			double id_switch = subs.manual_sp.aux3; //Check if in CLSYSID Mode
 			if(id_switch > 0.5 || id_switch < -0.5){
 				bool bModeChanged = false;
+				printf("MODE_CLSYSID before if loop = %s\n", MODE_CLSYSID ? "true" : "false");
+				printf("bModeChanged before if loop = %s\n", bModeChanged ? "true" : "false");
 				if (!MODE_CLSYSID){
 					//Change mode if first time in loop
 					MODE_CLSYSID = true;
 					bModeChanged = true;
+					printf("MODE_CLSYSID = %s\n", MODE_CLSYSID ? "true" : "false");
+					printf("bModeChanged = %s\n", bModeChanged ? "true" : "false");	
 				}
 				float rangleref = params->CLSYSID_nom_roll*DEG2RAD;
 				float pangleref = params->CLSYSID_nom_pitch*DEG2RAD;
 				float id_step = 0.0f;
 				RET = HLcontrol.CLSYSIDControl(id_step, bModeChanged);
+				printf("RET before if loop %d\n", RET);
 				if (RET) {
 					switch (params->CLSYSID_ctrlinput)
 					{
@@ -227,13 +232,15 @@ void ASLAutopilot::update()
 						break;
 					case 1: // roll
 						rangleref += id_step;
+						printf("id_step_outerloop %d.%d\n", (int)id_step,(int)((id_step-(int)id_step)*100));
 						break;
 					default: // error
 						break;
 					}
+				}else{bModeChanged = false;}
 				ctrldata->RollAngleRef = rangleref;
 				ctrldata->PitchAngleRef = pangleref;
-				}else{bModeChanged = false;}
+				//printf("pangleref %d.%d\nrangleref %d.%d\n", (int)pangleref,(int)((pangleref-(int)pangleref)*100),(int)rangleref,(int)((rangleref-(int)rangleref)*100));
 			} else {
 				if (MODE_CLSYSID) MODE_CLSYSID = false;
 				ctrldata->aslctrl_mode = MODE_CAS;
