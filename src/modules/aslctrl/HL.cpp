@@ -175,13 +175,13 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 	{
 	case 0: // 2-1-1
 		//params->CLSYSID_settime = 0.0f;
-		t_req = params->CLSYSID_tExcite*4.0f + 6.0f;
+		t_req = params->CLSYSID_tExcite*4.0f + 3.0f;
 		printf("value of CLSYSID_maneuver in case %d:%d\n", (int)0, (int)params->CLSYSID_maneuver);
 		printf("value of t_req in case %d:%d\n", (int)0, (int)t_req);
 		break;
 	case 1: // chirp
 		//params->CLSYSID_settime = 1.0f;
-		t_req = params->CLSYSID_tExcite + 6.0f;
+		t_req = params->CLSYSID_tExcite + 3.0f;
 		printf("value of CLSYSID_maneuver in case %d:%d\n", (int)1, (int)params->CLSYSID_maneuver);
 		printf("value of t_req in case %d:%d\n", (int)1, (int)t_req);
 		break;
