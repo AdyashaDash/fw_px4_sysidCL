@@ -231,10 +231,15 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 			if (float(current_time-t_idstart)/1.0E6f>(params->CLSYSID_tExcite+params->CLSYSID_settime)||float(current_time-t_idstart)/1.0E6f<params->CLSYSID_settime) {
 				id_step = 0.0f;
 			} else {
-				float k=(params->CLSYSID_f_end-params->CLSYSID_f_start)/params->CLSYSID_tExcite;
-				float phase=2*PI*(params->CLSYSID_f_start+k*0.5f*current_time)*current_time;
-    			id_step = sin(phase);
+				float delta = params->CLSYSID_Fs*(current_time/params->CLSYSID_tExcite);
+				float t = (params->CLSYSID_tExcite-t_idstart)*delta;
+				float phase = 2.0f * PI * t*(params->CLSYSID_f_start + ((params->CLSYSID_f_end - params->CLSYSID_f_start)*delta)/ 2);
+				//float k=(params->CLSYSID_f_end-params->CLSYSID_f_start)/params->CLSYSID_tExcite;
+				//float phase=2*PI*(params->CLSYSID_f_start+k*0.5f*current_time)*current_time;
+    			//id_step = sin(phase);
+    			id_step = (float)sin(phase);
     			id_step *= params->CLSYSID_step*DEG2RAD;
+    			//avoids implicit conversion error
 			}
 			break;	
 		default: // error
