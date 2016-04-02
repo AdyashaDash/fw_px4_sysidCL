@@ -151,7 +151,7 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 	float CLSYSID_tExcite; 				// excitation time (sec) corresponding to apprx. mode natural frequency
 	float CLSYSID_step; 				// excitation unit step size eg: 5, -5 etc. (in degrees), NOTE: sign implies the direction of the first step in a given maneuver
 	float CLSYSID_nom_pitch				// nominal pitch-reference value
-	float CLSYSID_nom_roll				// nominal roll-reference value 
+	float CLSYSID_nom_roll				// nominal roll-reference value
 	uint8_t CLSYSID_maneuver; 			// maneuver selection: 2-1-1 (0), chirp (1)
 	uint8_t CLSYSID_ctrlinput; 			// control selection: pitch (0), roll (1)
 	uint8_t CLSYSID_f_start				// start frequency for chirp
@@ -175,13 +175,13 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 	{
 	case 0: // 2-1-1
 		//params->CLSYSID_settime = 0.0f;
-		t_req = params->CLSYSID_tExcite*4.0f + 3.0f;
+		t_req = params->CLSYSID_tExcite*4.0f + 1.0f;
 		printf("value of CLSYSID_maneuver in case %d:%d\n", (int)0, (int)params->CLSYSID_maneuver);
 		printf("value of t_req in case %d:%d\n", (int)0, (int)t_req);
 		break;
 	case 1: // chirp
 		//params->CLSYSID_settime = 1.0f;
-		t_req = params->CLSYSID_tExcite + 3.0f;
+		t_req = params->CLSYSID_tExcite + 2.0f;
 		printf("value of CLSYSID_maneuver in case %d:%d\n", (int)1, (int)params->CLSYSID_maneuver);
 		printf("value of t_req in case %d:%d\n", (int)1, (int)t_req);
 		break;
@@ -210,7 +210,7 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
 	} else {
 
 		//cl sys id maneuver control
-		
+
 		switch(params->CLSYSID_maneuver)
 		{
 		case 0: // 2-1-1
@@ -241,7 +241,7 @@ int HL::CLSYSIDControl(float& id_step, bool bModeChanged)
     			id_step *= params->CLSYSID_step*DEG2RAD;
     			//avoids implicit conversion error
 			}
-			break;	
+			break;
 		default: // error
 			RET = 0;
 			printf("I am switching to defaut case in id_step case\n");
